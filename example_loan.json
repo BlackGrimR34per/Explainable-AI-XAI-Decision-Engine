@@ -1,0 +1,86 @@
+{
+    "applicationId": "LA-2026-000001",
+    "applicationDate": "2025-12-15T15:18:23.996569",
+    "applicationType": "personal_loan",
+    "loanDetails": {
+      "loanAmount": 71660.53,
+      "currency": "MYR",
+      "requestedTenure": 24,
+      "tenureUnit": "months",
+      "purpose": "home_renovation",
+      "loanToIncomeRatio": 0.44
+    },
+    "personalInformation": {
+      "age": 38,
+      "gender": "male",
+      "maritalStatus": "single",
+      "numberOfDependents": 1,
+      "educationLevel": "diploma"
+    },
+    "contactInformation": {
+      "residentialAddress": {
+        "city": "Kuala Lumpur",
+        "state": "Selangor",
+        "residencyType": "rented",
+        "yearsAtAddress": 14
+      }
+    },
+    "employmentInformation": {
+      "employmentStatus": "permanent_employee",
+      "industry": "finance",
+      "employmentTenureMonths": 58,
+      "employmentStabilityScore": 0.97
+    },
+    "financialInformation": {
+      "monthlyGrossIncome": 13708.03,
+      "monthlyNetIncome": 11480.23,
+      "otherMonthlyIncome": 0,
+      "totalMonthlyIncome": 11480.23,
+      "monthlyCommitments": {
+        "housingLoan": 1379.36,
+        "carLoan": 0,
+        "creditCardPayments": 0,
+        "otherCommitments": 280.48,
+        "totalCommitments": 1659.84
+      },
+      "debtServiceRatio": 0.121,
+      "savingsAmount": 34661.84,
+      "existingPropertyValue": 241926.18
+    },
+    "existingBankingRelationship": {
+      "isExistingCustomer": false,
+      "customerTenureMonths": 0,
+      "hasCreditCard": true,
+      "creditCardUtilization": 0.25,
+      "loanRepaymentHistory": "no_history",
+      "numberOfLatePayments": 0
+    },
+    "creditInformation": {
+      "ctosScore": 776,
+      "ccrisScore": 1,
+      "creditScoreCategory": "excellent",
+      "previousBankruptcy": false,
+      "activeJudgements": false,
+      "numberOfCreditEnquiries": 5,
+      "totalCreditAccounts": 10,
+      "totalCreditUtilization": 0.58
+    },
+    "riskIndicators": {
+      "geographicRiskScore": 0.16,
+      "industryRiskScore": 0.24,
+      "overallRiskScore": 0.21
+    },
+    "calculatedMetrics": {
+      "monthlyLoanInstalment": 3096.2,
+      "instalmentToIncomeRatio": 0.226,
+      "totalCommitmentsAfterLoan": 4756.03,
+      "newDebtServiceRatio": 0.347,
+      "cashReserveMonths": 7.3
+    },
+    "targetVariable": {
+      "approvalDecision": "approved",
+      "approvalConfidence": 0.95,
+      "riskCategory": "low",
+      "rejectionReasons": []
+    }
+  }
