@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import Card from '../shared/Card';
 import GaugeChart from '../visualizations/GaugeChart';
 import FactorChart from '../visualizations/FactorChart';
-import DecisionFlow from '../visualizations/DecisionFlow';
+import RiskBreakdown from '../visualizations/RiskBreakdown';
 import WhatIfSlider from '../shared/WhatIfSlider';
 import { factorMetadata, riskLevelConfig, decisionStatusConfig } from '../../data/mockData';
 
@@ -109,6 +109,10 @@ export default function OfficerView({ application, whatIfValues, onWhatIfChange 
               <InfoRow label="Tenure" value={`${application.loanDetails?.term} months`} />
               <InfoRow label="Purpose" value={application.loanDetails?.purpose} />
             </div>
+          </Card>
+
+          <Card title="Risk Assessment Breakdown" icon="🎯" delay={0.4}>
+            <RiskBreakdown application={application} />
           </Card>
 
           {/* Key Inputs */}

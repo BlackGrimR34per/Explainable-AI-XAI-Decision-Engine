@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import Card from '../shared/Card';
 import FactorChart from '../visualizations/FactorChart';
-import DecisionFlow from '../visualizations/DecisionFlow';
+// import DecisionFlow from '../visualizations/DecisionFlow';
 import { factorMetadata, riskLevelConfig, decisionStatusConfig } from '../../data/mockData';
 
 export default function RegulatorView({ application }) {
