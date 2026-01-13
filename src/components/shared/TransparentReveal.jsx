@@ -6,8 +6,8 @@ import { motion, useInView } from 'framer-motion';
  * Adds a solid overlay that becomes transparent when element enters viewport
  * Perfect metaphor for "AI Transparency" - literally making things transparent!
  */
-export default function TransparentReveal({ 
-  children, 
+export default function TransparentReveal({
+  children,
   delay = 0,
   className = '',
   overlayColor = 'from-slate-950 to-slate-900', // gradient colors
@@ -16,7 +16,7 @@ export default function TransparentReveal({
   once = true, // only animate once
 }) {
   const ref = useRef(null);
-  const isInView = useInView(ref, { 
+  const isInView = useInView(ref, {
     once,
     amount: threshold,
     margin: "0px 0px -100px 0px" // trigger slightly before element is fully visible
@@ -33,14 +33,14 @@ export default function TransparentReveal({
     <div ref={ref} className={`relative overflow-hidden ${className}`}>
       {/* The actual content */}
       {children}
-      
+
       {/* The "opacity" overlay that becomes transparent */}
       <motion.div
         initial={{ opacity: 1 }}
-        animate={{ 
+        animate={{
           opacity: hasBeenInView ? 0 : 1,
         }}
-        transition={{ 
+        transition={{
           duration: animationDuration,
           delay,
           ease: [0.25, 0.1, 0.25, 1.0] // smooth easing
@@ -52,14 +52,14 @@ export default function TransparentReveal({
       >
         {/* Optional: Add a subtle pattern or texture */}
         <div className="absolute inset-0 opacity-30 bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.05),transparent_50%)]" />
-        
+
         {/* Optional: Add "revealing" animation effect */}
         <motion.div
           initial={{ scaleX: 0 }}
-          animate={{ 
+          animate={{
             scaleX: hasBeenInView ? 1 : 0,
           }}
-          transition={{ 
+          transition={{
             duration: animationDuration * 0.6,
             delay: delay + animationDuration * 0.3,
             ease: "easeInOut"
@@ -73,7 +73,7 @@ export default function TransparentReveal({
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: [0, 0.5, 0] }}
-          transition={{ 
+          transition={{
             duration: animationDuration,
             delay,
             times: [0, 0.5, 1]
