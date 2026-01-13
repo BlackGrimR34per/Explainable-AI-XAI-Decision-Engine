@@ -31,9 +31,7 @@
 
 | Layer | Technology |
 |-------|------------|
-| **Framework** | React 18 + Vite |
+| **Framework** | React |
 | **Styling** | Tailwind CSS 3.3 |
 | **Charts** | Chart.js 4.4 |
-| **Animations** | Framer Motion |
-| **Fonts** | DM Sans + JetBrains Mono |
 
