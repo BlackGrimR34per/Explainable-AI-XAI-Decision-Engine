@@ -1,156 +1,86 @@
 {
-  "applicationId": "LA-2026-001234",
-  "applicationDate": "2026-01-12T10:30:00+08:00",
-  "applicationType": "personal_loan",
-  "loanDetails": {
-    "loanAmount": 50000.00,
-    "currency": "MYR",
-    "requestedTenure": 60,
-    "tenureUnit": "months",
-    "purpose": "home_renovation",
-    "purposeDescription": "Kitchen and bathroom renovation",
-    "interestRateType": "fixed"
-  },
-  "personalInformation": {
-    "title": "Mr",
-    "fullName": "Ahmad Bin Abdullah",
-    "icNumber": "900515-10-5678",
-    "passportNumber": null,
-    "dateOfBirth": "1990-05-15",
-    "gender": "male",
-    "maritalStatus": "married",
-    "numberOfDependents": 2,
-    "nationality": "Malaysian",
-    "race": "Malay",
-    "religion": "Islam",
-    "educationLevel": "bachelor_degree"
-  },
-  "contactInformation": {
-    "mobileNumber": "+60123456789",
-    "homeNumber": "+60378901234",
-    "email": "ahmad.abdullah@email.com",
-    "preferredContactMethod": "mobile",
-    "residentialAddress": {
-      "addressLine1": "No. 45, Jalan Merpati 3/2",
-      "addressLine2": "Taman Sejahtera",
-      "city": "Petaling Jaya",
-      "state": "Selangor",
-      "postcode": "47301",
-      "country": "Malaysia",
-      "residencyType": "owned",
-      "yearsAtAddress": 5
+    "applicationId": "LA-2026-000001",
+    "applicationDate": "2025-12-15T15:18:23.996569",
+    "applicationType": "personal_loan",
+    "loanDetails": {
+      "loanAmount": 71660.53,
+      "currency": "MYR",
+      "requestedTenure": 24,
+      "tenureUnit": "months",
+      "purpose": "home_renovation",
+      "loanToIncomeRatio": 0.44
     },
-    "mailingAddress": {
-      "sameAsResidential": true
+    "personalInformation": {
+      "age": 38,
+      "gender": "male",
+      "maritalStatus": "single",
+      "numberOfDependents": 1,
+      "educationLevel": "diploma"
+    },
+    "contactInformation": {
+      "residentialAddress": {
+        "city": "Kuala Lumpur",
+        "state": "Selangor",
+        "residencyType": "rented",
+        "yearsAtAddress": 14
+      }
+    },
+    "employmentInformation": {
+      "employmentStatus": "permanent_employee",
+      "industry": "finance",
+      "employmentTenureMonths": 58,
+      "employmentStabilityScore": 0.97
+    },
+    "financialInformation": {
+      "monthlyGrossIncome": 13708.03,
+      "monthlyNetIncome": 11480.23,
+      "otherMonthlyIncome": 0,
+      "totalMonthlyIncome": 11480.23,
+      "monthlyCommitments": {
+        "housingLoan": 1379.36,
+        "carLoan": 0,
+        "creditCardPayments": 0,
+        "otherCommitments": 280.48,
+        "totalCommitments": 1659.84
+      },
+      "debtServiceRatio": 0.121,
+      "savingsAmount": 34661.84,
+      "existingPropertyValue": 241926.18
+    },
+    "existingBankingRelationship": {
+      "isExistingCustomer": false,
+      "customerTenureMonths": 0,
+      "hasCreditCard": true,
+      "creditCardUtilization": 0.25,
+      "loanRepaymentHistory": "no_history",
+      "numberOfLatePayments": 0
+    },
+    "creditInformation": {
+      "ctosScore": 776,
+      "ccrisScore": 1,
+      "creditScoreCategory": "excellent",
+      "previousBankruptcy": false,
+      "activeJudgements": false,
+      "numberOfCreditEnquiries": 5,
+      "totalCreditAccounts": 10,
+      "totalCreditUtilization": 0.58
+    },
+    "riskIndicators": {
+      "geographicRiskScore": 0.16,
+      "industryRiskScore": 0.24,
+      "overallRiskScore": 0.21
+    },
+    "calculatedMetrics": {
+      "monthlyLoanInstalment": 3096.2,
+      "instalmentToIncomeRatio": 0.226,
+      "totalCommitmentsAfterLoan": 4756.03,
+      "newDebtServiceRatio": 0.347,
+      "cashReserveMonths": 7.3
+    },
+    "targetVariable": {
+      "approvalDecision": "approved",
+      "approvalConfidence": 0.95,
+      "riskCategory": "low",
+      "rejectionReasons": []
     }
-  },
-  "employmentInformation": {
-    "employmentStatus": "permanent_employee",
-    "employerName": "Tech Solutions Sdn Bhd",
-    "industry": "information_technology",
-    "occupation": "software_engineer",
-    "employmentTenure": 36,
-    "tenureUnit": "months",
-    "officeAddress": {
-      "addressLine1": "Level 15, MenaraAxis",
-      "addressLine2": "No. 2, Jalan 51A/223",
-      "city": "Petaling Jaya",
-      "state": "Selangor",
-      "postcode": "46100",
-      "country": "Malaysia"
-    },
-    "officePhone": "+60378123456"
-  },
-  "financialInformation": {
-    "monthlyGrossIncome": 8500.00,
-    "monthlyNetIncome": 6800.00,
-    "otherIncome": {
-      "rentalIncome": 1200.00,
-      "investmentIncome": 0.00,
-      "otherSources": 0.00
-    },
-    "monthlyCommitments": {
-      "housingLoan": 1500.00,
-      "carLoan": 800.00,
-      "personalLoans": 0.00,
-      "creditCardPayments": 300.00,
-      "otherCommitments": 200.00
-    },
-    "totalMonthlyCommitments": 2800.00,
-    "debtServiceRatio": 0.33
-  },
-  "existingBankingRelationship": {
-    "isExistingCustomer": true,
-    "customerSince": "2018-03-15",
-    "accountNumber": "1234567890",
-    "accountType": "savings",
-    "hasCreditCard": true,
-    "hasOtherLoans": true
-  },
-  "creditInformation": {
-    "ctosCcrisConsent": true,
-    "previousBankruptcy": false,
-    "activeJudgements": false,
-    "estimatedCreditScore": "good"
-  },
-  "collateral": {
-    "required": false,
-    "type": null,
-    "estimatedValue": null,
-    "description": null
-  },
-  "guarantor": {
-    "required": false,
-    "details": null
-  },
-  "supportingDocuments": {
-    "identificationDocument": {
-      "type": "ic_front_back",
-      "uploadStatus": "uploaded",
-      "fileReference": "DOC-IC-001234"
-    },
-    "incomeProof": {
-      "type": "payslip",
-      "uploadStatus": "uploaded",
-      "fileReference": "DOC-PAY-001234",
-      "numberOfMonths": 3
-    },
-    "epfStatement": {
-      "uploadStatus": "uploaded",
-      "fileReference": "DOC-EPF-001234"
-    },
-    "bankStatement": {
-      "uploadStatus": "uploaded",
-      "fileReference": "DOC-BANK-001234",
-      "numberOfMonths": 6
-    },
-    "utilityBill": {
-      "uploadStatus": "uploaded",
-      "fileReference": "DOC-UTIL-001234"
-    },
-    "additional": []
-  },
-  "declarations": {
-    "informationAccuracy": true,
-    "termsAndConditions": true,
-    "privacyPolicy": true,
-    "marketingConsent": false,
-    "pdpaConsent": true,
-    "declarationDate": "2026-01-12T10:30:00+08:00"
-  },
-  "applicationStatus": {
-    "currentStatus": "pending_review",
-    "submittedAt": "2026-01-12T10:30:00+08:00",
-    "lastUpdatedAt": "2026-01-12T10:30:00+08:00",
-    "assignedOfficer": null,
-    "remarks": null
-  },
-  "metadata": {
-    "channel": "web_application",
-    "deviceType": "desktop",
-    "ipAddress": "203.106.xxx.xxx",
-    "userAgent": "Mozilla/5.0...",
-    "referenceNumber": "REF-2026-001234",
-    "branchCode": "PJ001"
   }
-}
