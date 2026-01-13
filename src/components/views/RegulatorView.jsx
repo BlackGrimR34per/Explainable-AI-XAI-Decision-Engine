@@ -11,43 +11,43 @@ export default function RegulatorView({ application }) {
 
   // Compliance checks for Malaysian context
   const complianceChecks = [
-    { 
-      id: 'BNM-RL', 
-      name: 'BNM Responsible Lending', 
+    {
+      id: 'BNM-RL',
+      name: 'BNM Responsible Lending',
       status: 'pass',
       detail: 'Income verification completed as per BNM/RH/PD 032-9 guidelines'
     },
-    { 
-      id: 'PDPA', 
-      name: 'Personal Data Protection Act 2010', 
+    {
+      id: 'PDPA',
+      name: 'Personal Data Protection Act 2010',
       status: 'pass',
       detail: 'Applicant consent obtained for credit check and data processing'
     },
-    { 
-      id: 'CTOS', 
-      name: 'CTOS Data Access', 
+    {
+      id: 'CTOS',
+      name: 'CTOS Data Access',
       status: 'pass',
       detail: 'Credit report accessed with valid purpose and consent'
     },
-    { 
-      id: 'DSR', 
-      name: 'Debt Service Ratio Limit', 
+    {
+      id: 'DSR',
+      name: 'Debt Service Ratio Limit',
       status: inputs?.newDebtServiceRatio > 60 ? 'warning' : 'pass',
       detail: `Post-loan DSR ${inputs?.newDebtServiceRatio || 'N/A'}% ${
         inputs?.newDebtServiceRatio > 60 ? 'exceeds' : 'within'
       } 60% threshold`
     },
-    { 
-      id: 'ADVERSE', 
-      name: 'Adverse Action Disclosure', 
+    {
+      id: 'ADVERSE',
+      name: 'Adverse Action Disclosure',
       status: decision.status === 'denied' ? 'attention' : 'pass',
-      detail: decision.status === 'denied' 
+      detail: decision.status === 'denied'
         ? 'Adverse action notice required - verify disclosure sent'
         : 'Not applicable - application not denied'
     },
-    { 
-      id: 'AKPK', 
-      name: 'AKPK Referral (if applicable)', 
+    {
+      id: 'AKPK',
+      name: 'AKPK Referral (if applicable)',
       status: decision.status === 'denied' && inputs?.newDebtServiceRatio > 60 ? 'attention' : 'pass',
       detail: decision.status === 'denied' && inputs?.newDebtServiceRatio > 60
         ? 'High DSR applicant denied - consider AKPK referral'
@@ -76,14 +76,14 @@ export default function RegulatorView({ application }) {
               Application {application.id} • Decision: {decision.status.toUpperCase()} • Risk: {riskConfig.label}
             </p>
           </div>
-          
+
           <div className="flex items-center gap-6">
             <ComplianceStat value={passCount} label="Passed" color="emerald" />
             <ComplianceStat value={warnCount} label="Warnings" color="amber" />
             <ComplianceStat value={attentionCount} label="Attention" color="rose" />
           </div>
         </div>
-        
+
         {/* Compliance Progress */}
         <div className="mt-6">
           <div className="flex items-center gap-2 mb-2">
@@ -93,15 +93,15 @@ export default function RegulatorView({ application }) {
             </span>
           </div>
           <div className="h-2 bg-slate-800 rounded-full overflow-hidden flex">
-            <div 
+            <div
               className="h-full bg-emerald-500 transition-all duration-500"
               style={{ width: `${(passCount / complianceChecks.length) * 100}%` }}
             />
-            <div 
+            <div
               className="h-full bg-amber-500 transition-all duration-500"
               style={{ width: `${(warnCount / complianceChecks.length) * 100}%` }}
             />
-            <div 
+            <div
               className="h-full bg-rose-500 transition-all duration-500"
               style={{ width: `${(attentionCount / complianceChecks.length) * 100}%` }}
             />
@@ -121,8 +121,8 @@ export default function RegulatorView({ application }) {
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.2 + index * 0.05 }}
                   className={`p-4 rounded-xl border ${
-                    check.status === 'pass' 
-                      ? 'bg-emerald-500/5 border-emerald-500/20' 
+                    check.status === 'pass'
+                      ? 'bg-emerald-500/5 border-emerald-500/20'
                       : check.status === 'warning'
                         ? 'bg-amber-500/5 border-amber-500/20'
                         : 'bg-rose-500/5 border-rose-500/20'
@@ -131,8 +131,8 @@ export default function RegulatorView({ application }) {
                   <div className="flex items-center justify-between mb-2">
                     <div className="flex items-center gap-3">
                       <span className={`w-6 h-6 rounded-full flex items-center justify-center text-sm ${
-                        check.status === 'pass' 
-                          ? 'bg-emerald-500/20 text-emerald-400' 
+                        check.status === 'pass'
+                          ? 'bg-emerald-500/20 text-emerald-400'
                           : check.status === 'warning'
                             ? 'bg-amber-500/20 text-amber-400'
                             : 'bg-rose-500/20 text-rose-400'
@@ -143,8 +143,8 @@ export default function RegulatorView({ application }) {
                       <span className="text-sm text-slate-200">{check.name}</span>
                     </div>
                     <span className={`text-xs font-semibold uppercase ${
-                      check.status === 'pass' 
-                        ? 'text-emerald-400' 
+                      check.status === 'pass'
+                        ? 'text-emerald-400'
                         : check.status === 'warning'
                           ? 'text-amber-400'
                           : 'text-rose-400'
@@ -158,37 +158,20 @@ export default function RegulatorView({ application }) {
             </div>
           </Card>
         </div>
-
-        {/* Model Info */}
-        <Card title="Model Information" icon="🤖" delay={0.2}>
-          <div className="space-y-4">
-            <InfoBlock label="Model" value={audit?.model || 'N/A'} />
-            <InfoBlock label="Explainability" value={audit?.explainability || 'N/A'} />
-            <InfoBlock label="Decision Time" value={
-              audit?.timestamp 
-                ? new Date(audit.timestamp).toLocaleString('en-MY')
-                : 'N/A'
-            } />
-            <div className="h-px bg-slate-800 my-4" />
-            <InfoBlock label="Confidence Score" value={`${Math.round(decision.confidence * 100)}%`} />
-            <InfoBlock label="Risk Level" value={riskConfig.label} />
-            <InfoBlock label="Decision" value={decision.status.toUpperCase()} />
-          </div>
-        </Card>
       </div>
 
       {/* Audit Trail */}
-      <Card 
-        title="Complete Audit Trail" 
+      <Card
+        title="Complete Audit Trail"
         subtitle="Chronological record of all system actions"
-        icon="📋" 
+        icon="📋"
         delay={0.3}
       >
         {auditTrail && auditTrail.length > 0 ? (
           <div className="relative">
             {/* Timeline line */}
             <div className="absolute left-4 top-0 bottom-0 w-px bg-slate-800" />
-            
+
             <div className="space-y-4">
               {auditTrail.map((event, index) => (
                 <motion.div
@@ -205,7 +188,7 @@ export default function RegulatorView({ application }) {
                     event.action.includes('REVIEW') ? 'bg-amber-500' :
                     'bg-slate-600'
                   }`} />
-                  
+
                   <div className="p-3 rounded-lg bg-slate-800/30 border border-slate-700/30">
                     <div className="flex items-center justify-between mb-1">
                       <span className="text-sm font-medium text-slate-200">{event.action}</span>
@@ -235,17 +218,12 @@ export default function RegulatorView({ application }) {
             Positive values indicate factors pushing toward approval; negative values indicate factors pushing toward denial.
           </p>
         </Card>
-
-        {/* Decision Logic */}
-        <Card title="Decision Logic Path" icon="🔀" delay={0.5}>
-          <DecisionFlow application={application} />
-        </Card>
       </div>
 
       {/* Regulatory References */}
-      <Card 
-        title="Applicable Regulatory Framework" 
-        icon="⚖️" 
+      <Card
+        title="Applicable Regulatory Framework"
+        icon="⚖️"
         delay={0.6}
       >
         <div className="grid grid-cols-2 gap-4">
@@ -296,7 +274,7 @@ function ComplianceStat({ value, label, color }) {
     amber: 'text-amber-400',
     rose: 'text-rose-400',
   };
-  
+
   return (
     <div className="text-center">
       <div className={`text-2xl font-bold ${colorClasses[color]}`}>{value}</div>
