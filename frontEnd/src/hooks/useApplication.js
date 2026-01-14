@@ -1,10 +1,9 @@
 import { useState, useEffect, useCallback } from 'react';
 import { fetchApplicationDecision, runWhatIfSimulation } from '../services/api';
-import { mockApplications } from '../data/mockData';
 
 /**
  * Custom hook for managing application data
- * Supports both API fetching and mock data fallback
+ * Supports both API fetching and JSON file loading fallback
  */
 export function useApplication(applicationId, useMockData = true) {
   const [application, setApplication] = useState(null);
@@ -18,12 +17,17 @@ export function useApplication(applicationId, useMockData = true) {
 
       try {
         if (useMockData) {
-          // Use mock data for development/demo
-          const mockApp = mockApplications.find(app => app.id === applicationId);
-          if (mockApp) {
-            setApplication(mockApp);
+          // Fetch pre-transformed data from JSON file
+          const response = await fetch('/data/raw_applications.json');
+          if (!response.ok) {
+            throw new Error(`Failed to load applications: ${response.status}`);
+          }
+          const applications = await response.json();
+          const app = applications.find(app => app.id === applicationId);
+          if (app) {
+            setApplication(app);
           } else {
-            setApplication(mockApplications[0]);
+            setApplication(applications[0]);  // Fallback
           }
         } else {
           // Fetch from API
@@ -32,8 +36,14 @@ export function useApplication(applicationId, useMockData = true) {
         }
       } catch (err) {
         setError(err.message);
-        // Fallback to mock data on error
-        setApplication(mockApplications[0]);
+        // Fallback: try loading from JSON if API fails
+        try {
+          const response = await fetch('/data/raw_applications.json');
+          const applications = await response.json();
+          setApplication(applications[0]);
+        } catch (fallbackErr) {
+          setError(fallbackErr.message);
+        }
       } finally {
         setLoading(false);
       }
@@ -91,18 +101,58 @@ export function useWhatIf(applicationId, originalInputs) {
 }
 
 /**
+ * Custom hook for fetching applications list from JSON
+ */
+export function useApplicationsList(useMockData = true) {
+  const [applications, setApplications] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    async function loadApplicationsList() {
+      setLoading(true);
+      setError(null);
+
+      try {
+        if (useMockData) {
+          // Fetch applications list from JSON file
+          const response = await fetch('/data/applications_list.json');
+          if (!response.ok) {
+            throw new Error(`Failed to load applications list: ${response.status}`);
+          }
+          const list = await response.json();
+          setApplications(list);
+        } else {
+          // Fetch from API
+          const data = await fetchApplicationsList();
+          setApplications(data);
+        }
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    loadApplicationsList();
+  }, [useMockData]);
+
+  return { applications, loading, error };
+}
+
+/**
  * Local what-if calculation fallback
  * Simple linear approximation when API is unavailable
  */
 function calculateLocalWhatIf(original, modified) {
   let confidenceDelta = 0;
-  
+
   Object.entries(modified).forEach(([key, value]) => {
     const originalValue = original[key];
     if (originalValue === undefined) return;
-    
+
     const change = value - originalValue;
-    
+
     // Approximate impact based on feature
     switch (key) {
       case 'ctosScore':
@@ -128,7 +178,7 @@ function calculateLocalWhatIf(original, modified) {
         break;
     }
   });
-  
+
   return {
     confidenceDelta,
     newConfidence: Math.max(0, Math.min(1, 0.87 + confidenceDelta)), // Base on typical confidence

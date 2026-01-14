@@ -308,18 +308,122 @@ class LoanDataGenerator:
 
         return data
 
+    def transform_to_frontend_format(self, raw_data):
+        """Transform raw generated data to frontEnd mockData.js format"""
+        transformed = {
+            'id': raw_data['applicationId'],
+            'applicant': {
+                'name': random.choice(self.names),  # Use generated names
+                'email': f"{raw_data['applicationId'].lower()}@email.com",  # Dummy
+                'phone': '+60 12-345 6789',  # Dummy
+                'icNumber': 'XXXXXX-XX-XXXX',  # Dummy
+            },
+            'loanDetails': {
+                'type': 'Personal Loan',  # Default, or map from purpose
+                'amount': raw_data['loanDetails']['loanAmount'],
+                'term': raw_data['loanDetails']['requestedTenure'],
+                'purpose': raw_data['loanDetails']['purpose'],
+                'currency': 'MYR',
+            },
+            'inputs': {
+                'ctosScore': raw_data['creditInformation']['ctosScore'],
+                'monthlyIncome': raw_data['financialInformation']['monthlyGrossIncome'],
+                'employmentTenureMonths': raw_data['employmentInformation']['employmentTenureMonths'],
+                'existingDebtServiceRatio': raw_data['financialInformation']['debtServiceRatio'],
+                'newDebtServiceRatio': raw_data['calculatedMetrics']['newDebtServiceRatio'],
+                'loanAmount': raw_data['loanDetails']['loanAmount'],
+                'loanTenure': raw_data['loanDetails']['requestedTenure'],
+                'existingLoans': raw_data['existingBankingRelationship']['numberOfLatePayments'],  # Approximate
+                'bankruptcyHistory': raw_data['creditInformation']['previousBankruptcy'],
+                'latePayments': raw_data['existingBankingRelationship']['numberOfLatePayments'],
+            },
+            'decision': {
+                'status': raw_data['targetVariable']['approvalDecision'],
+                'confidence': raw_data['targetVariable']['approvalConfidence'],
+                'riskLevel': raw_data['targetVariable']['riskCategory'].upper(),
+                'interestRate': 5.5 if raw_data['targetVariable']['approvalDecision'] == 'approved' else None,  # Dummy
+                'monthlyPayment': round(raw_data['calculatedMetrics']['monthlyLoanInstalment'], 2) if raw_data['targetVariable']['approvalDecision'] == 'approved' else None,
+                'timestamp': raw_data['applicationDate'],
+            },
+            'topReasons': self.generate_top_reasons(raw_data['targetVariable']['rejectionReasons'], raw_data['targetVariable']['approvalDecision']),
+            'shapValues': self.generate_shap_values(raw_data['targetVariable']['rejectionReasons']),
+            'whatIfSuggestions': [
+                {'change': 'Improve credit score', 'expectedOutcome': 'Higher approval chance'},
+                {'change': 'Reduce loan amount', 'expectedOutcome': 'Lower DSR'},
+            ],  # Dummy
+            'rules': [
+                {'id': 'R1', 'description': 'Credit score check', 'impact': 'positive' if raw_data['creditInformation']['ctosScore'] > 650 else 'negative', 'weight': 'high'},
+            ],  # Dummy
+            'ragContext': {
+                'policies': [{'source': 'BNM Guidelines', 'text': 'DSR guidelines'}],  # Dummy
+                'regulations': [{'source': 'PDPA 2010', 'text': 'Data protection'}],  # Dummy
+                'precedents': [{'caseId': 'LA-2025-001', 'similarity': 0.8, 'outcome': 'approved'}],  # Dummy
+            },
+            'audit': {
+                'model': 'Simulated',
+                'explainability': 'Dummy SHAP',
+                'timestamp': raw_data['applicationDate'],
+            },
+            'auditTrail': [
+                {'timestamp': raw_data['applicationDate'], 'action': 'Application Generated', 'actor': 'system'},
+            ],  # Dummy
+        }
+        return transformed
+
+    def generate_top_reasons(self, rejection_reasons, decision):
+        """Generate topReasons from rejectionReasons"""
+        if decision == 'approved':
+            return [
+                {'feature': 'ctosScore', 'direction': 'positive', 'impact': 1.0, 'explanation': 'Good credit'},
+                {'feature': 'monthlyIncome', 'direction': 'positive', 'impact': 0.5, 'explanation': 'Sufficient income'},
+            ]
+        else:
+            reasons = []
+            for reason in rejection_reasons:
+                if 'credit' in reason.lower():
+                    reasons.append({'feature': 'ctosScore', 'direction': 'negative', 'impact': 1.0, 'explanation': reason})
+                elif 'dsr' in reason.lower():
+                    reasons.append({'feature': 'newDebtServiceRatio', 'direction': 'negative', 'impact': 0.8, 'explanation': reason})
+                elif 'employment' in reason.lower():
+                    reasons.append({'feature': 'employmentTenureMonths', 'direction': 'negative', 'impact': 0.6, 'explanation': reason})
+            return reasons[:5]  # Limit to 5
+
+    def generate_shap_values(self, rejection_reasons):
+        """Generate dummy shapValues based on rejection reasons"""
+        shap = {}
+        if any('credit' in r.lower() for r in rejection_reasons):
+            shap['ctosScore'] = -1.0
+        if any('dsr' in r.lower() for r in rejection_reasons):
+            shap['newDebtServiceRatio'] = -0.8
+        if any('employment' in r.lower() for r in rejection_reasons):
+            shap['employmentTenureMonths'] = -0.6
+        shap['monthlyIncome'] = 0.5  # Default positive
+        return shap
+
     def generate_dataset(self, n_samples=1000):
         """Generate complete dataset"""
-        dataset = []
+        raw_dataset = []
         for i in range(1, n_samples + 1):
-            dataset.append(self.generate_application(i))
-        return dataset
+            raw_dataset.append(self.generate_application(i))
 
-    def save_dataset(self, dataset, filename="loan_applications.json"):
-        """Save dataset to JSON file"""
-        with open(filename, 'w') as f:
+        # Transform to frontEnd format
+        frontend_dataset = [self.transform_to_frontend_format(raw) for raw in raw_dataset]
+        return frontend_dataset
+
+    def save_dataset(self, dataset, filename="synthetic_loan_data.json"):
+        """Save dataset to JSON file in frontEnd public/data"""
+        # Save full applications
+        full_path = "../../frontEnd/public/data/raw_applications.json"  # Relative path
+        with open(full_path, 'w') as f:
             json.dump(dataset, f, indent=2)
-        print(f"Generated {len(dataset)} applications and saved to {filename}")
+
+        # Save applications list
+        list_data = [{'id': app['id'], 'status': app['decision']['status'], 'confidence': app['decision']['confidence'], 'riskLevel': app['decision']['riskLevel']} for app in dataset]
+        list_path = "../../frontEnd/public/data/applications_list.json"
+        with open(list_path, 'w') as f:
+            json.dump(list_data, f, indent=2)
+
+        print(f"Generated {len(dataset)} applications and saved to {full_path} and {list_path}")
 
         # Print statistics
         approved = sum(1 for d in dataset if d["targetVariable"]["approvalDecision"] == "approved")

@@ -9,11 +9,11 @@ const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 export async function fetchApplicationDecision(applicationId) {
   try {
     const response = await fetch(`${API_BASE_URL}/api/applications/${applicationId}/decision`);
-    
+
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
-    
+
     const data = await response.json();
     return transformApiResponse(data);
   } catch (error) {
@@ -23,18 +23,47 @@ export async function fetchApplicationDecision(applicationId) {
 }
 
 /**
- * Fetch all applications (for sidebar)
- * @returns {Promise<ApplicationSummary[]>}
+ * Fetch raw application data from JSON file (now pre-transformed)
+ * @param {string} applicationId - The application ID to fetch
+ * @returns {Promise<Object>} Pre-transformed application data
  */
-export async function fetchApplicationsList() {
+export async function fetchRawApplication(applicationId) {
   try {
-    const response = await fetch(`${API_BASE_URL}/api/applications`);
-    
+    const response = await fetch('/data/raw_applications.json');
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
-    
-    return response.json();
+    const rawApplications = await response.json();
+    const rawApp = rawApplications.find(app => app.applicationId === applicationId);
+    if (!rawApp) {
+      throw new Error(`Application ${applicationId} not found in JSON`);
+    }
+    return rawApp;
+  } catch (error) {
+    console.error('Failed to fetch raw application:', error);
+    throw error;
+  }
+}
+
+/**
+ * Fetch all applications (for sidebar) - updated to support JSON
+ * @returns {Promise<ApplicationSummary[]>}
+ */
+export async function fetchApplicationsList(useJson = false) {
+  try {
+    if (useJson) {
+      const response = await fetch('/data/applications_list.json');
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      return response.json();
+    } else {
+      const response = await fetch(`${API_BASE_URL}/api/applications`);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      return response.json();
+    }
   } catch (error) {
     console.error('Failed to fetch applications list:', error);
     throw error;
@@ -43,8 +72,8 @@ export async function fetchApplicationsList() {
 
 /**
  * Run what-if simulation
- * @param {string} applicationId 
- * @param {object} modifiedInputs 
+ * @param {string} applicationId
+ * @param {object} modifiedInputs
  * @returns {Promise<WhatIfResult>}
  */
 export async function runWhatIfSimulation(applicationId, modifiedInputs) {
@@ -56,11 +85,11 @@ export async function runWhatIfSimulation(applicationId, modifiedInputs) {
       },
       body: JSON.stringify(modifiedInputs),
     });
-    
+
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
-    
+
     return response.json();
   } catch (error) {
     console.error('Failed to run what-if simulation:', error);
