@@ -15,12 +15,14 @@ class ExplainabilityEngine:
         reason_codes: List[str] = []
 
         for feature, value in features.items():
-            # mock contribution: positive if bad, negative if good
-            contribution = value * 0.01
-            contributions[feature] = round(contribution, 3)
+            if isinstance(value, (int, float)):
+                contribution = value * 0.01
+                contributions[feature] = round(contribution, 3)
 
-            if feature in REASON_CODE_MAPPING and contribution > 0:
-                reason_codes.append(REASON_CODE_MAPPING[feature])
+                if feature in REASON_CODE_MAPPING and contribution > 0:
+                    reason_codes.append(REASON_CODE_MAPPING[feature])
+            else:
+                continue
 
         summary = "; ".join([REASON_CODE_MAPPING.get(f, f) for f in reason_codes]) \
                   or "No significant factors"
